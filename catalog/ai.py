@@ -1,5 +1,6 @@
 """BoxAPI chat client (OpenAI-style). The key comes only from the environment; nothing here is sent client-side."""
 import hashlib
+from concurrent.futures import ThreadPoolExecutor, TimeoutError as Deadline
 import json
 import logging
 import os
@@ -13,6 +14,9 @@ logger = logging.getLogger(__name__)
 BASE_URL = os.environ.get('AI_BASE_URL', 'https://ai.boxapi.ir/ai/v1').rstrip('/')
 MODEL = os.environ.get('AI_MODEL', 'openai/gpt-6-luna')
 ROUTER_MODEL = os.environ.get('AI_ROUTER_MODEL', MODEL)
+
+
+_calls = ThreadPoolExecutor(max_workers=8, thread_name_prefix='ai')
 
 
 class Unavailable(Exception):
@@ -33,8 +37,15 @@ def _post(model, messages, timeout, max_output_tokens=None, reasoning_effort=Non
     body = json.dumps(payload).encode()
     request = urllib.request.Request(BASE_URL + '/chat/completions', body, method='POST', headers={
         'Authorization': 'Bearer ' + os.environ['AI_API_KEY'], 'Content-Type': 'application/json'})
-    with urllib.request.urlopen(request, timeout=timeout) as response:
-        return json.loads(response.read())
+    def call():
+        with urllib.request.urlopen(request, timeout=timeout) as response:
+            return json.loads(response.read())
+    # urlopen's timeout bounds each socket wait, not the whole call; a slow answer once ran past gunicorn's 120 s and
+    # the worker was killed with every request in flight. This waits at most `timeout` in total, then falls back.
+    try:
+        return _calls.submit(call).result(timeout=timeout)
+    except Deadline:
+        raise TimeoutError('AI call exceeded %s s' % timeout) from None
 
 
 def chat_json(system, user, router=False, timeout=45, cache_seconds=3600, model=None, max_output_tokens=None,

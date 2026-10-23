@@ -902,7 +902,7 @@ function prodRow(p,why){
 const askNext=(q,skip)=>`<div class="ask-next">${askModes.filter(([id])=>id!==skip).map(([id,i,t])=>`<button type="button" class="chip" data-action="ask-switch" data-mode="${id}" data-query="${esc(q)}">${icon(i)}${t}</button>`).join('')}</div>`;
 function modelAnswer(d,q){
   if(d.off_topic)return `<p class="now-decision">${esc(d.summary||'این دستیار فقط برای پیدا کردن کالا و فروشگاه است.')}</p>`;
-  const picks=(d.picks||[]).slice(0,4),rest=picks.length?[]:(d.items||[]).slice(0,5);
+  const byId=new Map((d.items||[]).map(p=>[p.id,p])),picks=(d.picks||[]).map(x=>({product:byId.get(x.id),why:x.why})).filter(x=>x.product).slice(0,4),rest=picks.length?[]:(d.items||[]).slice(0,5);
   return `<p class="now-decision">${esc(d.summary||(picks.length||rest.length?'این‌ها به کارت می‌آیند:':'چیزی پیدا نکردم؛ ساده‌تر بنویس چه می‌خواهی.'))}</p>${picks.length||rest.length?`<section class="now-group"><h3>${picks.length?'پیشنهاد دستیار':'کالاهای مرتبط'}</h3>${picks.map(x=>prodRow(x.product,x.why)).join('')}${rest.map(p=>prodRow(p)).join('')}</section>`:''}${(d.follow_up||[]).length?`<div class="ask-next">${d.follow_up.map(f=>`<button type="button" class="chip" data-action="ask-follow" data-query="${esc(f)}">${esc(f)}</button>`).join('')}</div>`:''}${askNext(q,'model')}`;
 }
 function priceAnswer(d,q){
@@ -938,8 +938,8 @@ async function runTurn(thread,turn){
     let data;
     if(turn.mode==='now'){const [at,day]=String(turn.when||'').split('|');data=await api('/api/now',{q:turn.q,lat:origin.lat,lon:origin.lon,at,day});}
     else if(turn.mode==='model'){
-      const earlier=thread.turns.slice(0,thread.turns.indexOf(turn)).filter(x=>x.mode==='model').slice(-3).map(x=>({q:x.q,shown:(askData.get(x.id)?.data?.picks||[]).slice(0,3).map(p=>p.product.name)}));
-      data=await api('/api/assistant',{q:turn.q,history:earlier.length?JSON.stringify(earlier):''});cacheProducts([...(data.items||[]),...(data.picks||[]).map(p=>p.product)]);
+      const earlier=thread.turns.slice(0,thread.turns.indexOf(turn)).filter(x=>x.mode==='model').slice(-3).map(x=>({q:x.q,shown:(askData.get(x.id)?.data?.items||[]).slice(0,3).map(p=>p.name)}));
+      data=await api('/api/assistant',{q:turn.q,history:earlier.length?JSON.stringify(earlier):''});cacheProducts(data.items||[]);
     }else{data=await api('/api/products',{q:turn.q,sort:'price',limit:6});cacheProducts(data.items);}
     keep({data});
   }catch(error){keep({error:error.status===429?'چند لحظه صبر کن و دوباره بپرس.':error.status===400?'این را نفهمیدم؛ ساده‌تر بنویس.':error.message});}

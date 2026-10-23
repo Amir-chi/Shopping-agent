@@ -128,7 +128,8 @@ def ask(args):
         return result
     try:
         ranked = ai.chat_json(RANKER, json.dumps(dict(question=question, earlier=[t['q'] for t in earlier], priorities=understood['priorities'],
-                                                      candidates=[_compact(p) for p in items[:20]]), ensure_ascii=False), timeout=25)
+                                                      candidates=[_compact(p) for p in items[:20]]), ensure_ascii=False), timeout=25,
+                                reasoning_effort='low')  # a short ranking; full reasoning doubled the wait
     except ai.Unavailable:
         result['summary'] = 'فیلترها با هوش مصنوعی تشخیص داده شد؛ رتبه‌بندی هوشمند فعلاً در دسترس نیست.'
         return result
