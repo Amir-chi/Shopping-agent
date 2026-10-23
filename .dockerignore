@@ -1,0 +1,14 @@
+.env
+.env.*
+.git
+.venv
+data
+qa
+__pycache__
+**/__pycache__
+*.pyc
+staticfiles
+app.js
+styles.css
+catalog.css
+*.zip

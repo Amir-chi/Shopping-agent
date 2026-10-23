@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#FFFFFF">
+  <meta name="description" content="سرراه؛ بهترین قیمت، در نزدیک‌ترین مغازه. محصول مناسب را پیدا کن، فروشگاه‌ها را مقایسه کن و برای خرید حضوری آماده شو.">
+  <title>سرراه | بهترین قیمت، در نزدیک‌ترین مغازه</title>
+  <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <style>
+/* OD-LAYOUT-PRIMITIVES v1 — structure only */
+@layer od-layout {
+  :where(.od-stack,.od-row,.od-row-top,.od-cluster,.od-grid,.od-field,.od-stat,.od-cell,.od-tile)>:where(*){min-width:0}
+  .od-stack{display:flex;flex-direction:column;gap:var(--od-gap,8px)}
+  .od-row{display:flex;align-items:center;gap:var(--od-gap,8px)}
+  .od-row-top{display:flex;align-items:flex-start;gap:var(--od-gap,8px)}
+  .od-cluster{display:flex;flex-wrap:wrap;align-items:center;gap:var(--od-gap,8px)}
+  .od-fill{flex:1 1 0;min-width:0}.od-fixed{flex:none}
+  .od-grid{display:grid;gap:var(--od-gap,12px);grid-template-columns:repeat(var(--od-cols,3),minmax(0,1fr))}
+  .od-stat,.od-field,.od-cell{display:grid;gap:var(--od-gap,2px)}
+  :where(.od-stat,.od-field,.od-cell,.od-tile)>:where(*){display:block}
+  .od-tile{display:grid;grid-template-rows:auto 1fr}
+  .od-media{display:block;width:100%;height:auto;aspect-ratio:var(--od-ratio,auto)}.od-media-cover{object-fit:cover}
+  .od-icon{display:inline-block;inline-size:var(--od-icon-size,1em);block-size:var(--od-icon-size,1em);flex:none}
+  .od-truncate{display:block;max-width:100%;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+  .od-clamp-2,.od-clamp-3{display:-webkit-box;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere}.od-clamp-2{-webkit-line-clamp:2}.od-clamp-3{-webkit-line-clamp:3}
+  .od-lines-2{min-height:calc(2 * 1.4em)}.od-nowrap{white-space:nowrap}.od-keep{word-break:keep-all;overflow-wrap:anywhere}
+  .od-screen{display:grid;grid-template-rows:auto minmax(0,1fr) auto;height:100%}.od-scroll{overflow-y:auto;overscroll-behavior:contain;min-height:0}
+  .od-rail{display:flex;gap:var(--od-gap,8px);overflow-x:auto;scroll-snap-type:x proximity;scrollbar-width:none;padding-inline:var(--od-rail-pad,16px);scroll-padding-inline:var(--od-rail-pad,16px)}.od-rail::-webkit-scrollbar{display:none}
+  :where(.od-rail)>:where(*){flex:none;scroll-snap-align:start}:where(.od-rail)>:where(:last-child){margin-inline-end:var(--od-rail-pad,16px)}
+  .od-spacer{flex:none;visibility:hidden;pointer-events:none}.od-touch{min-width:44px;min-height:44px}
+}
+/* /OD-LAYOUT-PRIMITIVES v1 */
+  </style>
+  <link rel="preload" href="assets/vazirmatn-var-arabic.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="assets/lalezar-arabic.woff2" as="font" type="font/woff2" crossorigin>
+  <script>
+    // Set only an allowlisted theme before first paint; storage can be unavailable.
+    try { const theme=localStorage.getItem('nazdika-theme-v4'); document.documentElement.dataset.theme=['pop','poplilac','popyellow','ink','teal','olive','brown','night'].includes(theme)?theme:'pop'; }
+    catch { document.documentElement.dataset.theme='pop'; }
+  </script>
+  <link rel="stylesheet" href="ui.css?v=20261027-threads1">
+  <script src="catalog.js?v=20261027-ask2" defer></script>
+  <script src="shopping.js?v=20261027-threads1" defer></script>
+  <script src="reviews.js?v=20261024-ai-fixes" defer></script>
+  <script src="seller.js?v=20261027-seller-mode" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">رفتن به محتوای اصلی</a>
+  <header class="site-header" id="site-header"></header>
+  <div id="offline-banner" class="offline-banner" role="status" hidden>اتصال قطع است. انتخاب‌هایت محفوظ‌اند؛ برای دریافت اطلاعات دوباره تلاش کن.</div>
+  <main id="main" tabindex="-1"></main>
+  <nav id="bottom-nav" class="bottom-nav" aria-label="پیمایش اصلی"></nav>
+  <div id="toast" class="toast" role="status" hidden></div>
+  <div id="announcer" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+  <dialog id="dialog" class="dialog" aria-labelledby="dialog-title"></dialog>
+</body>
+</html>

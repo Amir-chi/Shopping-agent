@@ -1,0 +1,24 @@
+# Production override: docker compose -f compose.yaml -f compose.prod.yaml up -d --build
+services:
+  db:
+    # The catalog is ~1.1 GB; a larger buffer keeps hot tables in memory on this 2 GB server.
+    command: postgres -c shared_buffers=256MB -c effective_cache_size=1GB -c work_mem=8MB
+  caddy:
+    image: caddy:2.10-alpine
+    restart: unless-stopped
+    # Plain HTTP on the server IP; HTTPS comes from the Liara proxy app (see deploy/Caddyfile, deploy/liara-proxy).
+    environment:
+      # Must be set: with an empty key any request could claim to come through the proxy.
+      LIARA_PROXY_KEY: ${LIARA_PROXY_KEY:?set LIARA_PROXY_KEY in .env}
+    ports:
+      - "80:80"
+    volumes:
+      - ./deploy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      web:
+        condition: service_healthy
+volumes:
+  caddy_data:
+  caddy_config:

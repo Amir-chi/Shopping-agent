@@ -1,0 +1,19 @@
+# The Liara app «sarrah» (https://sarrah.liara.run). Liara ends HTTPS; this forwards every request to the server
+# (89.42.199.134) with the visitor's address. PROXY_KEY, a Liara env var equal to LIARA_PROXY_KEY in the server's .env,
+# proves a request came through here, so the server trusts that address only from this proxy.
+# Deploy from this folder: liara deploy (liara.json names the app and port).
+{
+	auto_https off
+	admin off
+	servers {
+		trusted_proxies static private_ranges
+	}
+}
+
+:80 {
+	reverse_proxy http://89.42.199.134 {
+		header_up Host {host}
+		header_up X-Client-IP {client_ip}
+		header_up X-Proxy-Key {$PROXY_KEY}
+	}
+}

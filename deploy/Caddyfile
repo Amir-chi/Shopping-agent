@@ -1,0 +1,23 @@
+# Plain HTTP on the server's IP; the HTTPS address is https://sarrah.liara.run, a Liara app that forwards here
+# (deploy/liara-proxy). On plain HTTP browsers turn off geolocation, offline mode and the clipboard; the app falls back.
+# No access log: query strings can carry a shopper location.
+{
+	auto_https off
+}
+
+:80 {
+	encode zstd gzip
+	# Only requests carrying the shared key (from the Liara proxy) may name the visitor's address and https.
+	@liara header X-Proxy-Key {$LIARA_PROXY_KEY}
+	handle @liara {
+		reverse_proxy web:8000 {
+			header_up X-Forwarded-For {header.X-Client-IP}
+			header_up X-Forwarded-Proto https
+			header_up -X-Proxy-Key
+			header_up -X-Client-IP
+		}
+	}
+	handle {
+		reverse_proxy web:8000
+	}
+}

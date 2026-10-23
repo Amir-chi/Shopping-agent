@@ -1,0 +1,3 @@
+Fonts bundled in assets/ (SIL Open Font License 1.1; full text in OFL.txt):
+- Vazirmatn (vazirmatn-var-arabic.woff2, vazirmatn-var-latin.woff2: the variable font, Google Fonts subsets): Copyright 2015 The Vazirmatn Project Authors (https://github.com/rastikerdar/vazirmatn).
+- Lalezar (lalezar-arabic.woff2, lalezar-latin.woff2: Google Fonts subsets): Copyright 2015 The Lalezar Project Authors (https://github.com/BornaIz/Lalezar).
